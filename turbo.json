@@ -1,15 +1,33 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
-    },
-    "lint": {
-      "outputs": []
-    },
-    "dev": {
-      "cache": false
-    }
-  }
+	"$schema": "https://turbo.build/schema.json",
+	"pipeline": {
+		"build": {
+			"dependsOn": ["^build", "^db-generate"],
+			"outputs": [".expo/**"]
+		},
+		"db-generate": {
+			"inputs": ["prisma/schema.prisma"],
+			"cache": false
+		},
+		"db-push": {
+			"inputs": ["prisma/schema.prisma"],
+			"cache": false
+		},
+		"studio": {
+			"inputs": ["prisma/schema.prisma"],
+			"cache": false
+		},
+		"lint": {
+			"outputs": []
+		},
+		"dev": {
+			"dependsOn": ["^db-generate"],
+			"cache": false
+		}
+	},
+	"globalEnv": [
+		"DATABASE_URL",
+		"NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
+		"CLERK_SECRET_KEY"
+	]
 }

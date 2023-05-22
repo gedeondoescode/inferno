@@ -1,4 +1,5 @@
 import { generateOpenApiDocument } from "trpc-openapi";
+
 import { appRouter } from "./server";
 
 /* 👇 */

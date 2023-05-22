@@ -1,8 +1,6 @@
-import { TRPCError, initTRPC } from "@trpc/server";
 import { z } from "zod";
-import { OpenApiMeta } from "trpc-openapi";
-
-const t = initTRPC.meta<OpenApiMeta>().create();
+import { router } from "./trpc";
+import { publicProcedure } from "./trpc";
 
 interface User {
 	id: string;
@@ -16,34 +14,21 @@ const userList: User[] = [
 	},
 ];
 
-export const appRouter = t.router({
-	getUser: t.procedure
-		.meta({ /* 👉 */ openapi: { method: "GET", path: "/get-user" } })
-		.input(
-			z.object({
-				id: z.string(),
-			})
-		)
+export const appRouter = router({
+	unusedRoute: publicProcedure
+		// The input is unknown at this time.
+		// A client could have sent us anything
+		// so we won't assume a certain data type.
+		.input(z.object({ id: z.string() }))
 		.output(
 			z.object({
-				id: z.string(),
-				name: z.string(),
+				name: z.unknown(),
 			})
 		)
 		.query(({ input }) => {
 			const user = userList.find((u) => u.id === input.id);
 
-			if (!user) {
-				throw new TRPCError({
-					message: "User not found",
-					code: "NOT_FOUND",
-				});
-			}
-
 			console.log(user);
-
-			return { user };
+			return { name: user?.name };
 		}),
 });
-
-export type AppRouter = typeof appRouter;

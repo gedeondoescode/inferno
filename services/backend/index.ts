@@ -6,14 +6,7 @@ import { OpenApiMeta, createOpenApiExpressMiddleware } from "trpc-openapi";
 
 import swaggerUi from "swagger-ui-express";
 import { openApiDocument } from "./openapi";
-
-// created for each request
-const createContext = ({
-	req,
-	res,
-}: trpcExpress.CreateExpressContextOptions) => ({}); // no context
-type Context = inferAsyncReturnType<typeof createContext>;
-const t = initTRPC.context<Context>().meta<OpenApiMeta>().create();
+import { createContext } from "./context";
 
 const app = express();
 
@@ -35,4 +28,4 @@ app.use("/", swaggerUi.serve);
 app.get("/", swaggerUi.setup(openApiDocument));
 app.listen(5000, () => console.log("up and running on", "localhost:5000"));
 
-export type { AppRouter } from "./server";
+export type { appRouter } from "./server";

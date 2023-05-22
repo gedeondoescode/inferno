@@ -7,18 +7,20 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/react-query";
 import { Welcome } from "./Welcome";
 import Constants from "expo-constants";
+import SuperJSON from "superjson";
 
 export default function App() {
 	const getBaseUrl = () => {
 		const localhost = Constants.manifest?.debuggerHost?.split(":")[0];
 		if (!localhost)
 			throw new Error("failed to get localhost, configure it manually");
-		return `http://${localhost}:5000/api/trpc`;
+		return `http://${localhost}:5000/api/trpc/`;
 	};
 
 	const [queryClient] = useState(() => new QueryClient());
 	const [trpcClient] = useState(() =>
 		trpc.createClient({
+			transformer: SuperJSON,
 			// change the ip address to whatever address the Metro server is running on
 			// if you're using a Simulator 'localhost' should work fine
 			links: [httpBatchLink({ url: getBaseUrl() })],
