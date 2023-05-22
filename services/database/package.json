@@ -1,0 +1,27 @@
+{
+	"name": "database",
+	"version": "1.0.0",
+	"main": "./index.ts",
+	"types": "./index.ts",
+	"license": "UNLICENSED",
+	"scripts": {
+		"build": "tsc",
+		"clean": "rm -rf .turbo node_modules",
+		"with-env": "dotenv -e ../../.env ",
+		"studio": "yarn with-env prisma studio",
+		"db-push": "yarn with-env prisma db push",
+		"db-generate": "yarn with-env prisma generate"
+	},
+	"devDependencies": {
+		"@types/node": "^20.2.1",
+		"dotenv": "16.0.3",
+		"dotenv-cli": "7.2.1",
+		"prisma": "^4.14.1",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.0.4"
+	},
+	"dependencies": {
+		"@clerk/backend": "^0.19.2",
+		"@prisma/client": "^4.14.1"
+	}
+}
